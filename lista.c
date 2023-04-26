@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 typedef struct reg
 {
   int conteudo;
@@ -6,10 +7,9 @@ typedef struct reg
 } celula;
 typedef struct reg celula;
 void
-print (struct reg a)
+print (struct reg *ponteiro)
 {
-  struct reg *ponteiro;
-  ponteiro = &a;
+ 
   while (ponteiro != NULL)
     {
       printf ("%i\n", ponteiro->conteudo);
@@ -18,37 +18,53 @@ print (struct reg a)
     }
 }
 
-void
-remover (struct reg a, struct reg n)
-{
-    struct reg *ponteiro, *buffer,*N;
-    N=&n;
+void remover(struct reg **head_ref, int N) {
     
-  while (ponteiro != NULL)
-    {
-      if (&ponteiro == &N)
-	{
-	  buffer->prox = ponteiro->prox;
-      printf("a");
-	}
-      buffer = ponteiro;
-      ponteiro = ponteiro->prox;
-
+    struct reg *current = *head_ref, *prev = NULL;
+   
+    
+    if (current != NULL && current->conteudo == N) {
+        *head_ref = current->prox; 
+        
+        free(current); 
+        return;
     }
+
+    
+    while (current != NULL && current->conteudo != N) {
+        prev = current;
+        current = current->prox;
+    }
+
+    
+    prev->prox = current->prox;
+    free(current); 
 }
+
 
 int
 main ()
 {
+  celula *cabeca;
   celula a;
   a.conteudo = 1;
+  cabeca = & a;
   celula b;
   b.conteudo = 2;
   a.prox = &b;
   celula c;
   c.conteudo = 3;
   b.prox = &c;
-  remover(a,b);
-  print (a);
+  
+  print (cabeca);
+  
+  
+  remover(&cabeca,2);
+  
+  print (cabeca);
+  
+  
+  
+  
   return 0;
 }
